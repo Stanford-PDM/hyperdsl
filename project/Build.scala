@@ -60,6 +60,12 @@ object HyperDSLBuild extends Build with ForgePreprocessor {
   lazy val dsls = Project("dsls", file("delite/dsls"), settings = deliteBuildSettings) aggregate(optiql)
   lazy val optiql = Project("optiql", file("delite/dsls/optiql"), settings = deliteBuildSettings) dependsOn(framework, deliteTest)
 
+  val simpleSettings = deliteBuildSettings ++ Seq(
+    scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
+  )
+  lazy val simple = Project("simple", file("delite/dsls/simple"), settings = simpleSettings) dependsOn(framework, deliteTest)
+
+
   lazy val apps = Project("apps", file("delite/apps"), settings = deliteBuildSettings) aggregate(optiqlApps)
   lazy val optiqlApps = Project("optiql-apps", file("delite/apps/optiql"), settings = deliteBuildSettings) dependsOn(optiql)
 
