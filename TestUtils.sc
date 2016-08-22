@@ -91,7 +91,7 @@ def reportMissingTests: Unit = {
   } else {
     missingDsls.foreach { dsl => warn(s"Could not find dsl in config: $dsl") }
   }
-  for (dsl <- config.dsls) {
+  for (dsl <- config.dsls) try {
     if (!dsl.elems.contains(config.AllTests)) {
       val tests = discoverTests(dsl.name)
       val testsRun = dsl.elems.collect { case config.Test(name) => name }
@@ -123,6 +123,8 @@ def reportMissingTests: Unit = {
     missclassified.foreach {
       app => warn(s"Possible config mistake: $app was marked as Interpreted but generated a deg file.")
     }
+  } catch {
+    case e: Throwable => error(s"Could not retrieve information for dsl ${dsl.name}")
   }
 }
 

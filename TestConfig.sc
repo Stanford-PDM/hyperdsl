@@ -1,7 +1,7 @@
 /** Configuration for the test file */
 
 // Print commands before running them
-val debug = true
+val debug = false
 
 // Skip previously successful tests
 val skipSuccessfulTests = true
@@ -37,8 +37,10 @@ val skipList: Seq[(String, String)] = Seq(
   "Forge - OptiML - CGInterpreter - running" -> "Needs input",
   "Forge - OptiML - CGCompiler - running" -> "Needs input",
   "Forge - OptiML - ScratchpadRunner - running" -> "Needs input",
+  
   "Forge - OptiQL - GeneInterpreter" -> "Needs input",
   "Forge - OptiQL - GeneCompiler - running" -> "Needs input",
+  
   "Forge - OptiGraph - BCInterpreter" -> "Needs input",
   "Forge - OptiGraph - BCCompiler - running" -> "Needs input",
   "Forge - OptiGraph - CommunityDetectionInterpreter" -> "Needs input",
@@ -47,8 +49,11 @@ val skipList: Seq[(String, String)] = Seq(
   "Forge - OptiGraph - PageRankCompiler - running" -> "Needs input",
   "Forge - OptiGraph - UndirectedTriangleCountingInterpreter" -> "Needs input",
   "Forge - OptiGraph - UndirectedTriangleCountingCompiler - running" -> "Needs input",
+
   "Forge - OptiWrangler - ExamplesInterpreter" -> "Needs input",
-  "Forge - OptiWrangler - ExamplesCompiler - running" -> "Needs input" 
+  "Forge - OptiWrangler - ExamplesCompiler - running" -> "Needs input",
+
+  "Forge - MetaMeta" -> "Don't know what it is?"
   )
 
 // Path where to save successful tests from previous runs
@@ -76,7 +81,7 @@ val lms = cwd / "virtualization-lms-core"
 val tpchData = delite / 'bin / 'tpch
 
 val runtimes = Seq(Scala, CPP)
-lazy val dsls = Seq(simpleIntVector, simpleVector, optiml, optiql, optigraph, optiwrangler)
+lazy val dsls = Seq(simpleIntVector, simpleVector, optiml, optiql, optigraph, optiwrangler, optila, metameta)
 
 // The different runtimes we can compile to
 trait Runtime { def name: String }
@@ -181,3 +186,6 @@ val optigraph = Dsl(name = "OptiGraph", runner = "ppl.dsl.forge.dsls.optigraph.O
 val optiwrangler = Dsl(name = "OptiWrangler", runner = "ppl.dsl.forge.dsls.optiwrangler.OptiWranglerDSLRunner",
   InterpretedApp("ExamplesInterpreter"), StagedApp("ExamplesCompiler"))
 
+val optila = Dsl(name = "OptiLA", runner = "ppl.dsl.forge.dsls.optila.OptiLADSLRunner")
+
+val metameta = Dsl(name = "MetaMeta", runner = "ppl.dsl.forge.examples.MetaMetaDSLRunner")
