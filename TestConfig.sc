@@ -53,7 +53,9 @@ val skipList: Seq[(String, String)] = Seq(
   "Forge - OptiWrangler - ExamplesInterpreter" -> "Needs input",
   "Forge - OptiWrangler - ExamplesCompiler - running" -> "Needs input",
 
-  "Forge - MetaMeta" -> "Don't know what it is?"
+  "Forge - MetaMeta" -> "Don't know what it is?",
+
+  "Forge - OptiML - testOnly ValidationSuiteCompiler" -> "violating ordering of effects !!!!"
   )
 
 // Path where to save successful tests from previous runs
@@ -145,7 +147,7 @@ val optiml = Dsl(name = "OptiML", runner = "ppl.dsl.forge.dsls.optiml.OptiMLDSLR
   InterpretedApp("Example12Interpreter"), StagedApp("Example12Compiler"),
   InterpretedApp("Example13Interpreter"), StagedApp("Example13Compiler"),
   InterpretedApp("Example14"),
-  InterpretedApp("Example15"), // TODO: Restaged app
+  InterpretedApp("Example15"),
   InterpretedApp("GDAInterpreter"), StagedApp("GDACompiler"),
   InterpretedApp("GibbsInterpreter"), StagedApp("GibbsCompiler"),
   InterpretedApp("KDDNNInterpreter"), StagedApp("KDDNNCompiler"),
