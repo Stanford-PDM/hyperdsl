@@ -11,7 +11,7 @@ val prefix = "TestAll-"
 /** Print an error to the console and exit */
 def error(s: String) = {
   Console.err.println("[" + Color.Red(s"${prefix}error") + "] " + s)
-  if (config.stopOnError) {
+  if (config.stopOnError && config.playSounds) {
     % afplay (cwd / "error.wav")
     System.exit(1)
   }
@@ -211,7 +211,7 @@ def makeReport: Unit = {
     if (config.playSounds) % afplay (cwd / "success.wav")
   } else {
     error("Some tests failed!")
-    % afplay (cwd / "error.wav")
+    if (config.playSounds) % afplay (cwd / "error.wav")
     val passed = filterPrefixes(passedTests)
     val failed = filterPrefixes(failedTests)
     for (test <- passed) {

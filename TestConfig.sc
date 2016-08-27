@@ -1,7 +1,7 @@
 /** Configuration for the test file */
 
 // Print commands before running them
-val debug = false
+val debug = true
 
 // Skip previously successful tests
 val skipSuccessfulTests = true
@@ -65,13 +65,13 @@ val testCache = cwd / ".testcache"
 val checkAllRun = true
 
 // Stop after failure of a test
-val stopOnError = true
+val stopOnError = false 
 
 // Play a sound when the execution terminates (useful for long runnning tests)
-val playSounds = true
+val playSounds = false
 
 // Run only the tests, ignore apps
-val runOnlyTests = true
+val runOnlyTests = false
 
 // Configuration folders
 val hyper = cwd
