@@ -141,7 +141,7 @@ def executeInteractiveDebug(wd: Path, cmd: Command[_]) = {
 /** Load tests that have already succeeded */
 var passedTests: Seq[String] = {
   if (config.skipSuccessfulTests && exists ! config.testCache) {
-    (read ! config.testCache).lines.filter(_.nonEmpty).toSeq
+    (read ! config.testCache).lines.filter(_.nonEmpty).map(_.trim).toSeq
   } else {
     Seq.empty
   }

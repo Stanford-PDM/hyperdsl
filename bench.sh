@@ -55,14 +55,15 @@ executeForAllThreads(){
         threadOpt="-t $numThreads"
       fi
       echo -n "Running $app on $numThreads threads (target=$target)"
-      local logFile=$app-$target-$numThreads-$extra
-      delite/bin/delite $threadOpt -r $NUM_RUNS -v $runner $DATA \
+      local logFile=$app-$target-$numThreads-$extras
+      bin/delite $threadOpt -r $NUM_RUNS -v ${app}Compiler $DATA \
         > logs/out/$logFile 2> logs/err/$logFile
       local res=$?
       if [ $res -eq 0 ]; then
         echo " => Success"
       else 
         echo " => Failed"
+        exit 1
       fi 
     done
   done
@@ -72,29 +73,29 @@ executeForAllThreads(){
 runApp(){
   local app=$1
   local runner=$2
-  
+
   # Run without any optimizations
   rm -f $runner.deg
-  runCommand "Compiling $app with (fusion=false,soa=true)" \
-    "delite/bin/delitec" --nf --ns $runner
+  runCommand "Compiling $app with (fusion=false,soa=false)" \
+    "bin/delitec" --nf --ns "${app}Compiler"
   executeForAllThreads $app $runner "nf-ns" 
-
-  # Run with soa only
-  rm -f $runner.deg
-  runCommand "Compiling $app with (fusion=false,soa=true)" \
-    "delite/bin/delitec" --nf $runner 
-  executeForAllThreads $app $runner "nf-s" 
 
   # Run with loop fusion only 
   rm -f $runner.deg
   runCommand "Compiling $app with (fusion=true,soa=false)" \
-    "delite/bin/delitec" --ns $runner
+    "bin/delitec" --ns "${app}Compiler"
   executeForAllThreads $app $runner "f-ns" 
   
+  # Run with soa only
+  rm -f $runner.deg
+  runCommand "Compiling $app with (fusion=false,soa=true)" \
+    "bin/delitec" --nf "${app}Compiler"
+  executeForAllThreads $app $runner "nf-s" 
+
   # Run with both
   rm -f $runner.deg
   runCommand "Compiling $app with (fusion=true,soa=true)" \
-    "delite/bin/delitec" $runner
+    "bin/delitec" "${app}Compiler"
   executeForAllThreads $app $runner "f-s" 
   
 }
@@ -102,10 +103,17 @@ runApp(){
 main(){
   local starttime=$(date +%s)
   source init-env.sh
+  #forge/bin/update ppl.dsl.forge.dsls.optiql.OptiQLDSLRunner OptiQL
+  cd published/OptiQL
 
-  for idx in 1 4 6; do # 2 3 14 
+  mkdir -p logs/out
+  mkdir -p logs/err
+  mkdir -p "times"
+
+  for idx in 1 6; do # 2 3 4 14 
     local app="TPCHQ$idx"
-    local runner="ppl.apps.dataquery.tpch.$app" 
+    local runner="ppl.apps.dataquery.tpch.$app"
+    
     runApp $app $runner
   done
 
